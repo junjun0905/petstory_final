@@ -33,21 +33,21 @@ public class BoardApiController {
      * isLike안에 board_id 값이 있는 것이 좋아요 눌린 게시물 입니다. (profile_id는 의미없음) 프론트에서 값 있는지 없는지 체크해서
      * 하트 색정하면 될듯 (내가 좋아요 했던 게시물인지)
      */
-    @GetMapping("/board/findAllPaging/{profile_id}")
+    @GetMapping("/board/findAllPaging/{profileId}")
     public Result<BoardQueryDto> findAllPaging(@RequestParam(value = "offset") int offset,
                                                @RequestParam(value = "limit") int limit,
-                                               @PathVariable("profile_id") Long profile_id){
-        return new Result(boardService.findAllPaging(offset, limit, profile_id));
+                                               @PathVariable("profileId") Long profileId){
+        return new Result(boardService.findAllPaging(offset, limit, profileId));
     }
 
 
     /**
      * 자신이 좋아요 한 게시물 조회
      */
-    @GetMapping("/board/findLike/{profile_id}")
+    @GetMapping("/board/findLike/{profileId}")
     public Result<BoardQueryDto> findLike(@RequestParam(value = "offset") int offset,
                                           @RequestParam(value = "limit") int limit,
-                                          @PathVariable("profile_id") Long profileId){
+                                          @PathVariable("profileId") Long profileId){
 
         return new Result(boardService.findLike(offset, limit, profileId));
     }
@@ -58,9 +58,9 @@ public class BoardApiController {
      * 2. 보드 아이디 뽑아 내기
      * 3. 보드 아이디로 보드 객체 리스트 반환
      */
-    @GetMapping("/board/findHashtag/{profile_id}")
-    public Result<BoardQueryDto> findHashtagBoard(@PathVariable("profile_id") Long profileId,
-                                                  @RequestParam(value = "hashtag_name") String hashtagName){
+    @GetMapping("/board/findHashtag/{profileId}")
+    public Result<BoardQueryDto> findHashtagBoard(@PathVariable("profileId") Long profileId,
+                                                  @RequestParam(value = "hashtagName") String hashtagName){
 
         return new Result(boardService.findHashtagBoard(hashtagName,profileId));
     }

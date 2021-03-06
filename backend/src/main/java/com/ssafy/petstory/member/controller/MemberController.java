@@ -49,18 +49,11 @@ public class MemberController {
             return new ResponseEntity<>("error 파라미터명, 형식 확인", HttpStatus.FORBIDDEN);
         }
 
-        System.out.println("===================================================");
-        System.out.println("이메일 받은거 : " + form.getEmail());
-
         Member member = new Member();
 
-
-        member.setName(form.getMember_name());
+        member.setName(form.getMemberName());
         member.setEmail(form.getEmail());
         member.setPassword(form.getPassword());
-
-//        member.setId(form.getMember_id());
-//        member.setBanned(form.is_banned());
 
         memberService.join(member);
         return new ResponseEntity<>("success", HttpStatus.OK); //이건 컨트롤러에서 해당 뷰를 보여주는 것이 아니라 redirect 오른쪽 주소로 url 요청 다시하는거(새로고침)
@@ -71,11 +64,11 @@ public class MemberController {
     /**
      * 맴버 정보 확인
      * */
-    @GetMapping("/detail/{member_id}")
-    public ResponseEntity<MemberForm> detail(@PathVariable("member_id") Long member_id, MemberForm form, Model model) {
+    @GetMapping("/detail/{memberId}")
+    public ResponseEntity<MemberForm> detail(@PathVariable("memberId") Long memberId, MemberForm form, Model model) {
 
         Member member = new Member();
-        member.setId(member_id);
+        member.setId(memberId);
 
 
         Member memberentity = memberService.detail(member.getId());  //id 받은걸로 엔티티 검색
@@ -86,7 +79,7 @@ public class MemberController {
 
         model.addAttribute("memberForm", new MemberForm());
         form.setEmail(memberentity.getEmail());
-        form.setMember_name(memberentity.getName());
+        form.setMemberName(memberentity.getName());
         form.setPassword(memberentity.getPassword());  //dto로 클라에 전달
 
         return new ResponseEntity<>(form, HttpStatus.OK);
@@ -96,12 +89,12 @@ public class MemberController {
     /**
      * 맴버 정보 수정
      * */
-    @PutMapping("member/update/{member_id}") // v2 mem id로 받아서 검색 후 수정, 받아오는 형식 memformdto
-    public ResponseEntity<String> updateMember(@PathVariable("member_id") Long member_id ,@Valid @RequestBody MemberForm form, Model model) {
+    @PutMapping("member/update/{memberId}") // v2 mem id로 받아서 검색 후 수정, 받아오는 형식 memformdto
+    public ResponseEntity<String> updateMember(@PathVariable("memberId") Long memberId , @Valid @RequestBody MemberForm form, Model model) {
 
         model.addAttribute("memberForm", new MemberForm());
 
-        memberService.update(member_id, form);
+        memberService.update(memberId, form);
         //Member findMember = memberService.findOne(id); 수정정보 리턴할 때
 
         return new ResponseEntity<>("회원 정보가 수정되었습니다.", HttpStatus.OK);
@@ -110,12 +103,12 @@ public class MemberController {
     /**
      * 맴버 정보 삭제
      * */
-    @DeleteMapping("member/delete/{member_id}")
-    public ResponseEntity<String> deleteMember(@PathVariable("member_id") Long member_id ) {
+    @DeleteMapping("member/delete/{memberId}")
+    public ResponseEntity<String> deleteMember(@PathVariable("memberId") Long memberId ) {
 
         Member member = new Member();
-        member.setId(member_id);
-        memberService.delete(member_id);
+        member.setId(memberId);
+        memberService.delete(memberId);
         return new ResponseEntity<>("회원 정보가 삭제되었습니다.", HttpStatus.OK);
     }//맴버정보보기를 눌러서 확인
 
@@ -164,7 +157,7 @@ public class MemberController {
         HttpStatus status = null;
         Member kakaomember;
 
-        member.setName(dto.getMember_name());
+        member.setName(dto.getMemberName());
         member.setEmail(dto.getEmail());
 
         System.out.println(member.getName());

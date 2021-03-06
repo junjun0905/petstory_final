@@ -23,9 +23,7 @@ public class ProfileRepository {
      * 프로필 생성
      */
     public void saveP(Profile profile){
-        System.out.println("+++++++++++++여기서 문제발생");
         em.persist(profile);
-        System.out.println("프로필 테이블 저장 후 아이디 확인"+ profile.getId());
     }
 
     /**
@@ -55,80 +53,78 @@ public class ProfileRepository {
         em.remove(profile);
     }
 
-    public int findlike(Long p_id,Long b_id){  //엔티티 사이즈로 리턴
+    public int findLike(Long pId, Long bId){  //엔티티 사이즈로 리턴
 
-            List<Like> likes = em.createQuery("SELECT m FROM Like m WHERE m.board.id = :board_id AND m.profileId = :profile_id", Like.class)
-                    .setParameter("board_id",b_id)
-                    .setParameter("profile_id",p_id)
+            List<Like> likes = em.createQuery("SELECT m FROM Like m WHERE m.board.id = :boardId AND m.profileId = :profileId", Like.class)
+                    .setParameter("boardId",bId)
+                    .setParameter("profileId",pId)
                     .getResultList();
 
             return likes.size();
     }
 
-    public void savelike(Like like) {
+    public void saveLike(Like like) {
         em.persist(like);
     }
 
-    public void dellike(Like like) {
+    public void delLike(Like like) {
         System.out.println("왜 삭제가 안되냐구1");
         em.remove(like);
     }
 
 
-    public void save_relation(Relation relation) {
+    public void saveRelation(Relation relation) {
         em.persist(relation);
     }
 
-    public void savealarm(Like like) {
+    public void saveAlarm(Like like) {
         Alarm alarm = new Alarm();
         alarm.setLikeId(like); //매핑
         em.persist(alarm);
     }
 
-    public void delalarm(Like dellike) {
+    public void delAlarm(Like dellike) {
         Alarm alarm = new Alarm();
         alarm.setLikeId(dellike); //매핑
 
         em.remove(alarm);
     }
 
-    public int likecount(Long profile_id) {
-        List<Like> likes = em.createQuery("SELECT m FROM Like m WHERE m.board.profile.id = :board_id", Like.class)
-                .setParameter("board_id",profile_id)
+    public int likeCount(Long profileId) {
+        List<Like> likes = em.createQuery("SELECT m FROM Like m WHERE m.board.profile.id = :boardId", Like.class)
+                .setParameter("boardId",profileId)
                 .getResultList();
 
-        List<Alarm> alarms = em.createQuery("select  a from Alarm  a where a.likeId in :like_ids", Alarm.class)
-                .setParameter("like_ids",likes)
+        List<Alarm> alarms = em.createQuery("select  a from Alarm  a where a.likeId in :likeIds", Alarm.class)
+                .setParameter("likeIds",likes)
                 .getResultList();
 
         return alarms.size();
     }
 
-    public List<Long> findAlarmBoard(Long profile_id) {
-        List<Board> boards = em.createQuery("SELECT m FROM Board m WHERE m.profile.id = :profile_id", Board.class)
-                .setParameter("profile_id",profile_id)
+    public List<Long> findAlarmBoard(Long profileId) {
+        List<Board> boards = em.createQuery("SELECT m FROM Board m WHERE m.profile.id = :profileId", Board.class)
+                .setParameter("profileId",profileId)
                 .getResultList();
 
-        List<Long> board_id = new ArrayList<>();
+        List<Long> boardId = new ArrayList<>();
 
         for(int i =0;i<boards.size();i++){
-            board_id.add(boards.get(i).getId());
+            boardId.add(boards.get(i).getId());
         }
 
-        return board_id;
+        return boardId;
     }
-    public void delalarm2(Like dellike) {
-        Alarm alarm = findDelAlarm(dellike.getLikeId());
-//        alarm.setLikeId(dellike); //매핑
-//        alarm.setAlarmId(dellike.getAlarm().getAlarmId());
+    public void delAlarm2(Like delLike) {
+        Alarm alarm = findDelAlarm(delLike.getLikeId());
         em.remove(alarm);
     }
 
-    public Alarm findDelAlarm(Long del_like_id){
+    public Alarm findDelAlarm(Long delLikeId){
         Alarm temp = new Alarm();
         try {
-        Alarm alarm = em.createQuery("SELECT m FROM Alarm m WHERE m.likeId.likeId = :del_like_id", Alarm.class)
-                .setParameter("del_like_id",del_like_id)
+        Alarm alarm = em.createQuery("SELECT m FROM Alarm m WHERE m.likeId.likeId = :delLikeId", Alarm.class)
+                .setParameter("delLikeId",delLikeId)
                 .getSingleResult();
             return alarm;
         } catch (NoResultException nre) {
@@ -137,10 +133,10 @@ public class ProfileRepository {
 
     }
 
-    public List<Like> findAlarmLike(Long board_id) {
+    public List<Like> findAlarmLike(Long boardId) {
         //2단계 board_id를 통해 like테이블에서 LIKE 엔티티 형식의 리스트로 받는다.
-        List<Like> likes = em.createQuery("SELECT m FROM Like m WHERE m.board.id = :board_id", Like.class)
-                .setParameter("board_id",board_id)
+        List<Like> likes = em.createQuery("SELECT m FROM Like m WHERE m.board.id = :boardId", Like.class)
+                .setParameter("boardId",boardId)
                 .getResultList();
 
         //수만큼 라이크 아이디 가 있을 건데 알람테이블에 존재 하는 것만 뽑자 이거야
@@ -167,25 +163,25 @@ public class ProfileRepository {
     public List<Profile> findFollowee(Long profile_id) {  //내가 팔로우 하는 사람 검색 하는거 니까 wer 로 검색하고 목록 가져와서 wee 아이디로 findone 하자
         List<Profile> weelist = new ArrayList<>();
 
-        List<Relation> followees = em.createQuery("SELECT m FROM Relation m WHERE m.follower_id = :profile_id", Relation.class)
-                .setParameter("profile_id",profile_id)
+        List<Relation> followees = em.createQuery("SELECT m FROM Relation m WHERE m.followerId = :profileId", Relation.class)
+                .setParameter("profileId",profile_id)
                 .getResultList();
 
         for(int i =0 ; i<followees.size() ;i++){
-            weelist.add(findOne(followees.get(i).getFollowee_id()));
+            weelist.add(findOne(followees.get(i).getFolloweeId()));
         }
         return weelist;
     }
 
-    public List<Profile> findFollower(Long profile_id) {//나를 팔로우 하는 사람 검색 하는거 니까 wee 로 검색하고 목록 가져와서 wer 아이디로 findone 하자
+    public List<Profile> findFollower(Long profileId) {//나를 팔로우 하는 사람 검색 하는거 니까 wee 로 검색하고 목록 가져와서 wer 아이디로 findone 하자
         List<Profile> werlist = new ArrayList<>();
 
-        List<Relation> followers = em.createQuery("SELECT m FROM Relation m WHERE m.followee_id = :profile_id", Relation.class)
-                .setParameter("profile_id",profile_id)
+        List<Relation> followers = em.createQuery("SELECT m FROM Relation m WHERE m.followeeId = :profileId", Relation.class)
+                .setParameter("profileId",profileId)
                 .getResultList();
 
         for(int i =0 ; i<followers.size() ;i++){
-            werlist.add(findOne(followers.get(i).getFollower_id()));
+            werlist.add(findOne(followers.get(i).getFollowerId()));
         }
         return werlist;
     }

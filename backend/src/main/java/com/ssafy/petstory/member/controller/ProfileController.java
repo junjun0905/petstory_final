@@ -115,10 +115,6 @@ public class ProfileController {
     @PostMapping("/profile/like")  // 좋아요 누른 사람의 프로필_id + 보드형식에 board_id만 담아서 받는다
     public ResponseEntity<String> like(@RequestBody LikeDto likeform){
 
-        System.out.println("=================================================== 보드확인");
-        System.out.println(likeform.getBoard().getId());
-        System.out.println(likeform.getProfileId());
-
         Like like = new Like();
 
         //엔티티로 변경해주자
@@ -127,12 +123,12 @@ public class ProfileController {
         like.setBoard(likeform.getBoard());       //좋아요 누른 게시물
 
         //일단 테이블에서 프로필아이디와 게시글아이디로 같은것이 있는지 찾아보자 참거짓으로 리턴 받자
-        boolean is_like_emtpy= profileService.findlike(like);
+        boolean is_like_emtpy= profileService.findLike(like);
 
         if(is_like_emtpy ==true){  //없으니까 생성하자 + 게시물의 like count 올리고-> 프로필 아이디로 게시물 검색해서 라이크 올리고
 
             profileService.likeup(like);
-            profileService.addlike(like);
+            profileService.addLike(like);
             return new ResponseEntity<>("success", HttpStatus.OK);
         }
         else{ // 이미 있으니까 없애자 + 이미 라이크 눌렀으니까 like count 내리고-> 프로필 아이디로 게시물 검색해서 라이크 내리고
@@ -148,24 +144,24 @@ public class ProfileController {
      * */
 
     @PostMapping("/profile/follow")  // post - 맴버로 로그인 후 프로필 생성 클릭 시 -> 프론트에서 맴버 id(세션에 저장된), 받아와 Member타입은 null로
-    public ResponseEntity<String> create(@RequestBody RelationForm follower_ee){
+    public ResponseEntity<String> create(@RequestBody RelationForm followerEe){
 
         System.out.println("확인1");
         //두 개 받고 나서 relation 테이블에 넣어주기 전 엔티티로 변경
         Relation relation = new Relation();
         System.out.println("확인2");
-        relation.setFollowee_id(follower_ee.getFollowee_id());
-        relation.setFollower_id(follower_ee.getFollower_id());
+        relation.setFolloweeId(followerEe.getFolloweeId());
+        relation.setFollowerId(followerEe.getFollowerId());
 
         // follower _id 로  그 프로필 엔티티 하나 가져 오고 followee_num 증가 후 업데이트
-        Profile profile1 = profileService.findone(follower_ee.getFollower_id());
+        Profile profile1 = profileService.findone(followerEe.getFollowerId());
         profile1.setFolloweeNum(profile1.getFolloweeNum()+1);
 
         // followee _id 로  그 프로필 엔티티 하나 가져 오고 follower_num 증가 후 업데이트
-        Profile profile2 = profileService.findone(follower_ee.getFollowee_id());
+        Profile profile2 = profileService.findone(followerEe.getFolloweeId());
         profile2.setFollowerNum(profile2.getFollowerNum()+1);
 
-        //System.out.println("1: "+follower_ee.getFollowee_id()+"2: "+follower_ee.getFollower_id()+"3: "+follower_ee.getRelation_id());
+        //System.out.println("1: "+followerEe.getFollowee_id()+"2: "+followerEe.getFollower_id()+"3: "+followerEe.getRelation_id());
         profileService.createrelation(relation);
 
         return new ResponseEntity<>("success", HttpStatus.OK); //이건 컨트롤러에서 해당 뷰를 보여주는 것이 아니라 redirect 오른쪽 주소로 url 요청 다시하는거(새로고침)
@@ -175,10 +171,10 @@ public class ProfileController {
     /**
      * 내가 팔로우 하는 사람 목록
      * */
-    @GetMapping("/pollow/followee/{profile_id}")
-    public ResponseEntity<List<Profile>> findFollowee(@PathVariable("profile_id") Long profile_id) {
+    @GetMapping("/pollow/followee/{profileId}")
+    public ResponseEntity<List<Profile>> findFollowee(@PathVariable("profileId") Long profileId) {
 
-        List<Profile> list = profileService.findFollowee(profile_id);
+        List<Profile> list = profileService.findFollowee(profileId);
 
         return new ResponseEntity<List<Profile>>(list, HttpStatus.OK);
     }//맴버정보보기를 눌러서 확인
@@ -186,10 +182,10 @@ public class ProfileController {
     /**
      * 나를 팔로우 하는 사람 목록
      * */
-    @GetMapping("/pollow/follower/{profile_id}")
-    public ResponseEntity<List<Profile>> findFollower(@PathVariable("profile_id") Long profile_id) {
+    @GetMapping("/pollow/follower/{profileId}")
+    public ResponseEntity<List<Profile>> findFollower(@PathVariable("profileId") Long profileId) {
 
-        List<Profile> list = profileService.findFollower(profile_id);
+        List<Profile> list = profileService.findFollower(profileId);
 
         return new ResponseEntity<List<Profile>>(list, HttpStatus.OK);
     }//맴버정보보기를 눌러서 확인
@@ -203,10 +199,10 @@ public class ProfileController {
      * 다중 프로필 선택하고 메인화면에 알람 수 표시하기 위해
      * */
 
-    @GetMapping("/main/{profile_id}") // 메인화면에 보여지는 것들 (나중에 내 친구의 프로필도 보여야함)
-    public ResponseEntity<Integer> main(@PathVariable("profile_id") Long profile_id) {
+    @GetMapping("/main/{profileId}") // 메인화면에 보여지는 것들 (나중에 내 친구의 프로필도 보여야함)
+    public ResponseEntity<Integer> main(@PathVariable("profileId") Long profileId) {
 
-        int likecount = profileService.likecount(profile_id);
+        int likecount = profileService.likecount(profileId);
 
         return new ResponseEntity<>(likecount, HttpStatus.OK);
     }//맴버정보보기를 눌러서 확인
@@ -221,10 +217,10 @@ public class ProfileController {
      * 3단게 LIKE 엔티티의 board_id 와 profile_id를 통해 게시물 제목과 프로필 닉네임을 List<AlarmClickDto>로 넣기
      * 4단게 like_id 를 통해 alarms 테이블에서 해당 알람을 삭제한다. (알람만) 그리고 List<AlarmClickDto> 리턴
      */
-    @GetMapping("/main/alarmclick/{profile_id}") // 알람버튼 눌렀을경우
-    public ResponseEntity<List<AlarmClickDto>> alarmclick(@PathVariable("profile_id") Long profile_id) {
+    @GetMapping("/main/alarmclick/{profileId}") // 알람버튼 눌렀을경우
+    public ResponseEntity<List<AlarmClickDto>> alarmclick(@PathVariable("profileId") Long profileId) {
 
-        List<AlarmClickDto> resultDto = profileService.findalarm(profile_id); //board 테이블에서 board id 찾기
+        List<AlarmClickDto> resultDto = profileService.findalarm(profileId); //board 테이블에서 board id 찾기
         //profileService.deleteAalarm(resultDto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
 

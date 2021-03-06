@@ -1,6 +1,5 @@
 package com.ssafy.petstory.member.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +15,10 @@ public class Relation {
     @Column(name = "relation_id")
     private Long id;
 
-    private long follower_id;
-    private long followee_id;
+    @Column(name = "foellwer_id")
+    private long followerId;
+    @Column(name = "foellwee_id")
+    private long followeeId;
 
 //    @JsonIgnore  //데이터 주고 받을 때 영향을 주지 않는다.
 //    @OneToOne(mappedBy = "relation", fetch = FetchType.LAZY)

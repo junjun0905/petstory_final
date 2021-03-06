@@ -17,14 +17,9 @@
       <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/board/controller/BoardApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/board/controller/BoardApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/board/domain/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/board/domain/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/board/repository/BoardRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/board/repository/BoardRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/file/repository/FileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/file/repository/FileRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/controller/ProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/domain/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/domain/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/domain/Relation.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/domain/Relation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/KakaoProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/KakaoProfile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/MemberForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/MemberForm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/OAuthTokenKakao.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/OAuthTokenKakao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/ProfileForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/dto/ProfileForm.java" afterDir="false" />
@@ -34,7 +29,6 @@
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/service/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/service/JwtService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/service/MemberService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/service/ProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/ssafy/petstory/member/service/ProfileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,12 +48,7 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="petstory" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -93,7 +82,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
@@ -150,7 +139,7 @@
       <updated>1615010311791</updated>
       <workItem from="1615010316391" duration="2726000" />
       <workItem from="1615013135937" duration="1674000" />
-      <workItem from="1615015090662" duration="1328000" />
+      <workItem from="1615015090662" duration="3006000" />
     </task>
     <servers />
   </component>
