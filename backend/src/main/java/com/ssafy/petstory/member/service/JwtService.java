@@ -29,7 +29,7 @@ public class JwtService {
         jwtBuilder
                 .setSubject("로그인토큰") // 토큰의 제목 설정
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin)) // 유효기간 설정
-                .claim("user", memberDto).claim("greeting", "환영합니다. " + memberDto.getMember_name()); // 담고 싶은 정보 설정.
+                .claim("user", memberDto).claim("greeting", "환영합니다. " + memberDto.getMemberName()); // 담고 싶은 정보 설정.
 
 //		signature 설정
         jwtBuilder.signWith(SignatureAlgorithm.HS256, signature.getBytes());

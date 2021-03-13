@@ -130,31 +130,6 @@ public class BoardService {
 
         boardHashtagService.update(boardId, board.getBoardHashtags(), request.getHashtags());
 
-        /**
-         * boardHashtag에 boardId가 같은 row에서 hashtagName이 같은 애는 남기고
-         * 다른 애들은 모두 지운 후,
-         * request.hashtagNames에서 매핑 결과가 없는 애만 해시태그에 추가
-         *
-         */
-
-//        for (String hashtag : request.getHashtags()) {
-//            System.out.println("------------------------------------------------------------");
-//            board.getBoardHashtags().forEach(bh -> {
-//                if(bh.getHashtag().getName() != hashtag){
-//                    notDupHashtagNames.add(hashtag);
-//                }else {
-//
-//                }
-//            });
-
-//            board.getBoardHashtags().stream().map((bh) -> {
-//                return bh.getHashtag().getName() != hashtag;
-//            }).anyMatch(Objects::isNull);
-
-//            System.out.println(collect);
-//        }
-
-
         List<Hashtag> hashtags = boardHashtagService.saveByNames(board, request.getHashtags());
         for (Hashtag hashtag : hashtags) {
             if (hashtag.getBoardHashtags() != board.getBoardHashtags()) {

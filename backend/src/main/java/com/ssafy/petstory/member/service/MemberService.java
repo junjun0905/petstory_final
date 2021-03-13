@@ -55,7 +55,7 @@ public class MemberService {
     @Transactional
     public void update(Long id, MemberForm form) {
         Member member = memberRepository.findOne(id);  //id로 해당하는거 찾아와서 수정하자
-        member.setName(form.getMember_name());
+        member.setName(form.getMemberName());
         member.setPassword(form.getPassword());
         member.setEmail(form.getEmail());
     }

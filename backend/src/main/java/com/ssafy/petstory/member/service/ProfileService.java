@@ -41,14 +41,6 @@ public class ProfileService {
         // 받아온 맴버로 프로필 생성
         Profile profile = Profile.createProfile(member, proform);
 
-//        Relation relation = new Relation();
-//        profileRepository.saveR(relation);
-        System.out.println("================================");
-//        System.out.println("릴레이션 엔티티 생성확인: "+relation.getId());
-        System.out.println("맴버 찾아온거 아이디 확인: " + member.getId());
-        //프로필 별 relation 테이블 최초생성, 초기값 전부 null로 생성 엔티티로 db 접근
-
-
         // 이미지 정보 생성
         if (!file.isEmpty()) {
             Image image = fileService.createImage(file);
@@ -105,66 +97,61 @@ public class ProfileService {
         profileRepository.delete(profile);  //id로 해당하는거 찾아와서 수정하자
     }
 
-    public boolean findlike(Like like) {
-        Long p_id = like.getProfileId();
-        Long b_id = like.getBoard().getId();
-        System.out.println("---------보드의 아이디 확인: "+like.getBoard().getId());
+    public boolean findLike(Like like) {
+        Long pId = like.getProfileId();
+        Long bId = like.getBoard().getId();
 
-        if (profileRepository.findlike(p_id, b_id) == 0) { // 라이크 테이블에 없으면
+        if (profileRepository.findLike(pId, bId) == 0) { // 라이크 테이블에 없으면
             return true;
         } else { //이미 좋아요 눌렀으면
             return false;
         }
     }
 
-    public void addlike(Like like) {  // likes table에 넣어준다 + 알람에도 넣어준다
-        profileRepository.savelike(like);
-        profileRepository.savealarm(like);
+    public void addLike(Like like) {  // likes table에 넣어준다 + 알람에도 넣어준다
+        profileRepository.saveLike(like);
+        profileRepository.saveAlarm(like);
     }
 
     public void deletelike(Like like) { // likes table에서 빼준다 넣어준다
         Like dellike = likeRepository.findOne(like);
-        System.out.println("  프로필 아이디  ==="+dellike.getProfileId());
-        System.out.println("  보드아이디  ==="+dellike.getBoard().getId());
-        System.out.println("  라이크아이디  ==="+dellike.getLikeId());
-        profileRepository.dellike(dellike);
-        profileRepository.delalarm(dellike);
+        profileRepository.delLike(dellike);
+        profileRepository.delAlarm(dellike);
     }
 
     public void likeup(Like like) {  //보드 아이디 이용해서 조회 후 like +1
-        Long board_id = like.getBoard().getId();
-        likeRepository.likeup(board_id);
+        Long boardId = like.getBoard().getId();
+        likeRepository.likeup(boardId);
     }
 
     public void likedown(Like like) {
-        Long board_id = like.getBoard().getId();
-        likeRepository.likedown(board_id);
+        Long boardId = like.getBoard().getId();
+        likeRepository.likedown(boardId);
     }
 
     public void createrelation(Relation relation) {
-        profileRepository.save_relation(relation);
+        profileRepository.saveRelation(relation);
     }
 
     public int likecount(Long profile_id) {
-        return profileRepository.likecount(profile_id);
+        return profileRepository.likeCount(profile_id);
     }
 
-    public List<AlarmClickDto> findalarm(Long profile_id) {
-        List<Long> board_id = profileRepository.findAlarmBoard(profile_id); //1단계 ok
+    public List<AlarmClickDto> findalarm(Long profileId) {
+        List<Long> boardId = profileRepository.findAlarmBoard(profileId); //1단계 ok
 
         //2단계 board_id를 통해 like테이블에서 LIKE 엔티티 형식의 리스트로 받는다.
 
         List<AlarmClickDto> alarmResult = new ArrayList<>();
         List<Like> likeL = new ArrayList<>();
         //board_id를 전부 돌면서 좋아요 받은거 Like 테이블에서 전부 가져와   -> 여기서 알람 테이블에 남아있는 녀석들만 가져와야해
-        for(int i =0;i<board_id.size();i++){
-            likeL = profileRepository.findAlarmLike(board_id.get(i));
+        for(int i =0;i<boardId.size();i++){
+            likeL = profileRepository.findAlarmLike(boardId.get(i));
         }
 
         //likeList의 프로필 아이디를 통해 좋아요 누른사람 닉네임 가져오자
         for(int j =0;j<likeL.size();j++){
             AlarmClickDto addalarm= new AlarmClickDto();
-            System.out.println("좋아요 누른사람의 프로필 아이디는? : "+ likeL.get(j).getProfileId());
             Profile forNickname = profileRepository.findOne(likeL.get(j).getProfileId());
             addalarm.setBoardTitle(likeL.get(j).getBoard().getTitle());
             addalarm.setProfileNickname(forNickname.getNickname());
@@ -172,36 +159,29 @@ public class ProfileService {
             alarmResult.add(addalarm);
         }
 
-        System.out.println("삭제될 likeList의 사이즈는? : "+likeL.size());
         //likeList의 likeid 로 알람 제거하자
         for(int k =0;k<likeL.size();k++){
-            System.out.println("삭제될 likeList 의 아이디 확인 : "+ likeL.get(k).getLikeId());
             //알람 ID 찾아서 그걸로 검색하고 삭제해볼까
-            profileRepository.delalarm2(likeL.get(k));
+            profileRepository.delAlarm2(likeL.get(k));
         }
-
-//        for(int j=0;j<likeList.size();j++){
-//            System.out.println("++++++++++++++++++++++++++++++++++++++");
-//            System.out.println("게시글 제목 : "+alarmResult.get(j).getBoardTitle() + "좋아요 누른사람 : "+ alarmResult.get(j).getProfileNickname());
-//        }
 
         return alarmResult;
     }
 
-    public Profile findone(Long follower_id) {
-        Profile profile = profileRepository.findOne(follower_id);
+    public Profile findone(Long followerId) {
+        Profile profile = profileRepository.findOne(followerId);
 
         return profile;
     }
 
-    public List<Profile> findFollowee(Long profile_id) {
-        List<Profile> list = profileRepository.findFollowee(profile_id);
+    public List<Profile> findFollowee(Long profileId) {
+        List<Profile> list = profileRepository.findFollowee(profileId);
 
         return list;
     }
 
-    public List<Profile> findFollower(Long profile_id) {
-        List<Profile> list = profileRepository.findFollower(profile_id);
+    public List<Profile> findFollower(Long profileId) {
+        List<Profile> list = profileRepository.findFollower(profileId);
 
         return list;
     }
